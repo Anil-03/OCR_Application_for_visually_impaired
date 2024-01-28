@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "795422950728",
+    "project_id": "textscan-7baf3",
+    "storage_bucket": "textscan-7baf3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:795422950728:android:6cbbf9694778bf9dd2df7d",
+        "android_client_info": {
+          "package_name": "com.example.anew"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAubxxxShkvobUkW1etXc9mKE-RogB5dBc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
