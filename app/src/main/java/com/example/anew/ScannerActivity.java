@@ -1,5 +1,5 @@
 package com.example.anew;
-
+import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -27,16 +27,22 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
 public class ScannerActivity extends AppCompatActivity {
 
-    ImageView captureIV=findViewById(R.id.myimage);
-    TextView resultTV=findViewById(R.id.newTxtview);
-    Button snapBtn=findViewById(R.id.btnSnap);
-    Button detectBtn=findViewById(R.id.btnDetect);
+    ImageView captureIV;
+    TextView resultTV;
+    Button snapBtn;
+    Button detectBtn;
     Bitmap imageBitmap;
     static final int REQUEST_IMAGE_CAPTURE=1;
+    private static final int PERMISSION_CODE = 200;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
+        captureIV=findViewById(R.id.newImgview);
+        resultTV=findViewById(R.id.newTxtview);
+        snapBtn=findViewById(R.id.btnSnap);
+        detectBtn=findViewById(R.id.btnDetect);
         snapBtn.setOnClickListener(v -> {
             if(checkPermission()){
                 captureImage();
@@ -48,26 +54,28 @@ public class ScannerActivity extends AppCompatActivity {
     }
 
     private boolean checkPermission(){
-        int cameraPermission= ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA_SERVICE);
+        int cameraPermission= ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA);
         return  cameraPermission== PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermission(){
         int PERMISSION_CODE=200;
-        ActivityCompat.requestPermissions(this,new String[]{CAMERA_SERVICE},PERMISSION_CODE);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSION_CODE);
 
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(grantResults.length>0){
-            boolean cameraPermission=grantResults[0]==PackageManager.PERMISSION_GRANTED;
-            if(cameraPermission){
-                Toast.makeText(this,"Permission Granted..",Toast.LENGTH_SHORT).show();
-                captureImage();
-            }else{
-                Toast.makeText(this,"Permission Denied",Toast.LENGTH_SHORT).show();
+        if (requestCode == PERMISSION_CODE) {
+            if (grantResults.length > 0) {
+                boolean cameraPermission = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                if (cameraPermission) {
+                    Toast.makeText(this, "Permission Granted..", Toast.LENGTH_SHORT).show();
+                    captureImage();
+                } else {
+                    Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }

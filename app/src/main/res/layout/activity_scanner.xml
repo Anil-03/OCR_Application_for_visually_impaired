@@ -9,12 +9,12 @@
 
     <ImageView
         android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_height="200dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:src="@drawable/scannermachine"
         android:id="@+id/newImgview"
-        />
+        android:contentDescription="@string/todo" />
 
     <TextView
         android:layout_width="match_parent"
