@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFF"
     tools:context=".MainActivity">
     <Button
         android:id="@+id/captureImg"
@@ -16,7 +17,7 @@
         android:textAllCaps="false"
         android:layout_marginTop="30dp"
         android:background="@drawable/next_page"
-        android:backgroundTint="#E1B30D"
+        android:backgroundTint="#E3DFD1"
         />
     <ImageView
         android:layout_width="200dp"
