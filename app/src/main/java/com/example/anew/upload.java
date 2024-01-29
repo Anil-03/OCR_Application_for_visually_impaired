@@ -31,12 +31,7 @@ public class upload extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
         detect=findViewById(R.id.uploadDetect);
-        detect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openFilePicker();
-            }
-        });
+        detect.setOnClickListener(v -> openFilePicker());
     }
 
     private void openFilePicker() {
@@ -84,9 +79,7 @@ public class upload extends AppCompatActivity {
                     TextView resultTextView = findViewById(R.id.uploadtxtView);
                     resultTextView.setText(resultText.toString());
                 })
-                .addOnFailureListener(e -> {
-                    Toast.makeText(this, "Failed to detect text from image", Toast.LENGTH_SHORT).show();
-                });
+                .addOnFailureListener(e -> Toast.makeText(this, "Failed to detect text from image", Toast.LENGTH_SHORT).show());
     }
 
 }
