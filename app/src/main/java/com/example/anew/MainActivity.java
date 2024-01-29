@@ -14,16 +14,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         captureImg = findViewById(R.id.captureImg);
-        //uploadImg = findViewById(R.id.uploadImg);
+        uploadImg = findViewById(R.id.uploadImg);
         captureImg.setOnClickListener(v -> {
             Intent i=new Intent(MainActivity.this,ScannerActivity.class);
             startActivity(i);
         });
-        uploadImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        uploadImg.setOnClickListener(v -> {
 
-            }
         });
     }
 }
