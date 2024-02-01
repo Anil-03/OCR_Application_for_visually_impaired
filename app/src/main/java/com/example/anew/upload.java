@@ -31,12 +31,14 @@ public class upload extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_upload);
         detect=findViewById(R.id.uploadDetect);
-        detect.setOnClickListener(v -> openFilePicker());
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        //detect.setOnClickListener(v -> openFilePicker());
     }
 
     private void openFilePicker() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        //Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        //startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

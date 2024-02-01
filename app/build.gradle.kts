@@ -40,8 +40,8 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:32.7.1"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.android.gms:play-services-mlkit-text-recognition:19.0.0")
-
-
+    implementation("com.google.android.tts: tts:1.1.0")
+    implementation("com.google.android.gms:play-services-speech:22.0.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")

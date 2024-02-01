@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     Button captureImg,uploadImg;
-    private static final int PICK_IMAGE_REQUEST = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent=new Intent(MainActivity.this, upload.class);
             startActivity(intent);
         });
+
     }
 
 
