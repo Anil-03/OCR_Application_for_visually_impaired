@@ -1,35 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".uploadActivity">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_height="wrap_content"
+    android:background="#A1C6E3"
+    tools:context=".upload">
+    <ImageView
         android:layout_width="match_parent"
-        android:fitsSystemWindows="true"
-        >
+        android:layout_height="wrap_content"
+        android:minHeight="200dp"
+        android:minWidth="200dp"
+        android:layout_alignParentTop="true"
+        android:id="@+id/uploadIV"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginHorizontal="20dp"
+        android:contentDescription="@string/todo" />
+    <ScrollView
+        android:id="@+id/uploadSV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="300dp"
+        android:layout_below="@id/uploadIV"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/uploadTV"
+            android:text=""
+            android:textSize="14sp"
+            android:textColor="#000"
+            android:layout_marginVertical="20dp"
+            />
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width = "match_parent"
-            android:layout_height = "?attr/actionBarSize" />
+    </ScrollView>
 
-  </com.google.android.material.appbar.AppBarLayout>
-
-  <include layout="@layout/content_upload"/>
-
-  <com.google.android.material.floatingactionbutton.FloatingActionButton
-  android:id="@+id/fab"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:layout_gravity="bottom|end"
-  android:layout_marginEnd="@dimen/fab_margin"
-  android:layout_marginBottom="16dp"
-  app:srcCompat="@android:drawable/ic_dialog_email" />
-
-  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    <Button
+        android:id="@+id/uploadDetectBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/uploadSV"
+        android:layout_marginTop="20dp"
+        android:text="@string/save"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/demo"/>
+</RelativeLayout>
