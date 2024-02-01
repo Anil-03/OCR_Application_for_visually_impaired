@@ -41,15 +41,20 @@ public class ScannerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scanner);
         captureIV=findViewById(R.id.newImgview);
         resultTV=findViewById(R.id.newTxtview);
-        snapBtn=findViewById(R.id.btnSnap);
+        //snapBtn=findViewById(R.id.btnSnap);
         detectBtn=findViewById(R.id.btnDetect);
-        snapBtn.setOnClickListener(v -> {
-            if(checkPermission()){
-                captureImage();
-            }else{
-                requestPermission();
-            }
-        });
+        //snapBtn.setOnClickListener(v -> {
+        //    if(checkPermission()){
+        //        captureImage();
+        //    }else{
+         //       requestPermission();
+         //   }
+        //});
+        if(checkPermission()){
+            captureImage();
+        }else{
+            requestPermission();
+        }
         detectBtn.setOnClickListener(v -> detectText());
     }
 
