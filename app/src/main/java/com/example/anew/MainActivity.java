@@ -2,13 +2,13 @@ package com.example.anew;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     Button captureImg,uploadImg;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,11 +20,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(i);
         });
         uploadImg.setOnClickListener(v -> {
-            Intent intent=new Intent(MainActivity.this, upload.class);
-            startActivity(intent);
+
         });
-
     }
-
-
 }
