@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="#A1C6E3"
-    tools:context=".upload">
+    tools:context=".Upload">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,14 +24,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="300dp"
+        android:scrollbars="vertical"
         android:layout_below="@id/uploadIV"
+        android:layout_above="@id/uploadDetectBtn"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        android:layout_marginBottom="20dp">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:scrollbars="vertical"
             android:id="@+id/uploadTV"
             android:text=""
             android:textSize="14sp"
@@ -43,14 +45,13 @@
 
     <Button
         android:id="@+id/uploadDetectBtn"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/uploadSV"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
         android:text="@string/save"
         />
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/demo"/>
+
 </RelativeLayout>

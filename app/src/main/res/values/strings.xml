@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">new</string>
     <string name="welcome_to_text_scanner">Welcome to Text Scanner</string>
-    <string name="capture">Capture</string>
+    <string name="capture">Capture Image</string>
     <string name="result">Result</string>
     <string name="snap">Snap</string>
     <string name="detect_text">Detect text</string>
     <string name="todo">TODO</string>
-    <string name="upload">Upload</string>
+    <string name="upload">Upload Image</string>
     <string name="title_activity_upload">uploadActivity</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -51,4 +51,12 @@
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
     <string name="save">Save</string>
+    <string name="save_as_doc">Save as Doc</string>
+    <string name="save_as_pdf">Save as PDF</string>
+    <string name="settings">Settings</string>
+    <string name="preferences">Preferences</string>
+    <string name="help">Help</string>
+    <string name="upload_document">Upload Document</string>
+    <string name="list_of_commands">List of Commands: \n\n1.Open Camera\n2.Upload Image\n3.Upload Document\n4.read text again\n5.Save as Text\n6.Save as PDF\n7.Go back</string>
+    <string name="description_of_commands">Open Camera:-Open the camera to capture an image\n\nUpload Image:-Open the image picker interface to pick an image from device storage\n\nUpload Document:-Opens the document picker interface to select a document to upload\n\nRead Text Again:-Read the text again\n\nSave as Text Document:-Save the text as document\n\nSave as PDF:-Save the text as PDF\n\nGo back:-Go back to home page</string>
 </resources>
