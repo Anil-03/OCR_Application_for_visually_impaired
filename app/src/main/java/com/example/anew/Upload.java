@@ -1,6 +1,7 @@
 package com.example.anew;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,10 +35,14 @@ public class Upload extends AppCompatActivity {
     private static final int CREATE_DOCUMENT_REQUEST_CODE = 1;
     Button save;
     private long lastVolumeUpClickTime = 0;
+    Boolean speechRecognition=true;
+    Boolean speechOutput=true;
+
     private int volumeUpClickCount = 0;
     Voice speech;
     String OCR_Result;
     TextView resultTextView;
+    int font_size;
     private static final int PICK_IMAGE_REQUEST = 2;
 
     @Override
@@ -49,25 +54,32 @@ public class Upload extends AppCompatActivity {
         save.setOnClickListener(this::showSaveOptions);
         resultTextView = findViewById(R.id.uploadTV);
         openFilePicker();
+        SharedPreferences uploadPref=getSharedPreferences("preferences",MODE_PRIVATE);
+        font_size=uploadPref.getInt("textSize",25);
+        speechRecognition=uploadPref.getBoolean("speechRecognitionFlag",true);
+        speechOutput=uploadPref.getBoolean("speechOutputFlag",true);
+        resultTextView.setTextSize(font_size);
     }
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-            long currentTime = System.currentTimeMillis();
-            // Check if it's a double click within a short duration
-            if (currentTime - lastVolumeUpClickTime < 500) {
-                volumeUpClickCount++;
-                // Perform speech recognition on double click
-                if (volumeUpClickCount == 2) {
-                    startSpeechRecognition();
-                    volumeUpClickCount = 0; // Reset click count
+        if(speechRecognition){
+            if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                long currentTime = System.currentTimeMillis();
+                // Check if it's a double click within a short duration
+                if (currentTime - lastVolumeUpClickTime < 500) {
+                    volumeUpClickCount++;
+                    // Perform speech recognition on double click
+                    if (volumeUpClickCount == 2) {
+                        startSpeechRecognition();
+                        volumeUpClickCount = 0; // Reset click count
+                    }
+                } else {
+                    volumeUpClickCount = 1; // Reset click count if it's a single click
                 }
-            } else {
-                volumeUpClickCount = 1; // Reset click count if it's a single click
+                lastVolumeUpClickTime = currentTime;
+                return true; // Consume the event
             }
-            lastVolumeUpClickTime = currentTime;
-            return true; // Consume the event
         }
         return super.onKeyUp(keyCode, event);
     }
@@ -199,7 +211,9 @@ public class Upload extends AppCompatActivity {
                     // Display the recognized text in your TextView
 
                     resultTextView.setText(resultText.toString());
-                    speech.speak(resultText.toString());
+                    if(speechOutput)
+                        speech.speak(resultText.toString());
+
                 })
                 .addOnFailureListener(e -> Toast.makeText(this, "Failed to detect text from image", Toast.LENGTH_SHORT).show());
         OCR_Result = resultTextView.getText().toString();

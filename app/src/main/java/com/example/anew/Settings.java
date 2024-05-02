@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,6 +18,8 @@ import java.util.ArrayList;
 
 public class Settings extends AppCompatActivity {
     Spinner eng_spinner, lang_spinner;
+
+    Boolean getSpeechRecognitionState,speechOutputState;
     Voice speech;
     Button help,feedback,logout,saveSettings;
     Boolean speechRecognition=true;
@@ -75,7 +78,7 @@ public class Settings extends AppCompatActivity {
             }
         });
         ArrayList<String> languageList = new ArrayList<>();
-        engineList.add("English");
+        languageList.add("English");
         ArrayAdapter<String> lang_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, languageList);
         lang_adapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
         lang_spinner.setAdapter(eng_adapter);
@@ -118,15 +121,28 @@ public class Settings extends AppCompatActivity {
 
         });
 
-        saveSettings.setOnClickListener(v-> storePreference());
+        saveSettings.setOnClickListener(v-> {
+            storePreference();
+            Toast.makeText(this,"Settings saved successfully",Toast.LENGTH_LONG).show();
+        });
+        stateChange(speechOutput,speechRecognition);
+    }
 
+    private void stateChange(Boolean so,Boolean sr) {
+        if(so)
+        {
+            speech_output.setChecked(true);
+        }
+        if(sr){
+            speech_recognition.setChecked(true);
+        }
     }
 
     private void storePreference() {
         SharedPreferences settingsPref=getSharedPreferences("settings",MODE_PRIVATE);
         SharedPreferences.Editor editor=settingsPref.edit();
         editor.putBoolean("speechRecognitionFlag",speechRecognition);
-        editor.putBoolean("speechOutput",speechOutput);
+        editor.putBoolean("speechOutputFlag",speechOutput);
         editor.putString("engine",engine);
         editor.putString("language",language);
         editor.apply();

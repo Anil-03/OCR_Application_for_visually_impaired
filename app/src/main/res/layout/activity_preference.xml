@@ -13,49 +13,13 @@
         android:layout_height="wrap_content"
         android:text="@string/preferences"
         android:textSize="30sp"/>
-
-    <LinearLayout
-        android:id="@+id/linear1"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/savePreference"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:orientation="vertical"
-        android:background="@drawable/rounded_layout"
-        android:backgroundTint="#00BCD4"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="20dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/theme"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginVertical="20dp"
-            android:background="#00BCD4"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_marginHorizontal="10dp"
-            android:layout_height="wrap_content"
-            android:background="#FFF"
-            android:layout_marginBottom="20dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="15dp"
-                android:layout_marginEnd="60dp"
-
-                android:text="@string/theme" />
-            <Spinner
-                android:id="@+id/theme_spinner"
-                android:background="#CAC2C2"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
+        android:text="@string/save"
+        android:layout_gravity="end"
+        android:layout_marginEnd="30dp"/>
     <LinearLayout
         android:id="@+id/linear2"
         android:layout_width="match_parent"
@@ -69,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/style"
+            android:textColor="#000"
             android:layout_marginHorizontal="10dp"
             android:layout_marginVertical="20dp"
             android:background="#00BCD4"/>
@@ -88,7 +53,8 @@
                 android:id="@+id/text_size"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:max="30"/>
+                android:max="35"/>
+
 
         </LinearLayout>
         <LinearLayout
@@ -98,9 +64,12 @@
             android:layout_marginVertical="20dp"
             android:background="#FFF"
             android:orientation="horizontal">
-
-
-
+            <TextView
+                android:id="@+id/demoTxtView"
+                android:layout_width="match_parent"
+                android:textColor="#000"
+                android:layout_height="wrap_content"
+                android:text="@string/hello_user"/>
 
         </LinearLayout>
     </LinearLayout>
@@ -130,6 +99,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="60dp"
+                android:textColor="#000"
                 android:text="@string/pitch_rate"/>
             <SeekBar
                 android:id="@+id/pitch_rate"
@@ -150,6 +120,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/volume"
                 android:layout_marginEnd="75dp"
+                android:textColor="#000"
                 />
             <SeekBar
                 android:id="@+id/volume"

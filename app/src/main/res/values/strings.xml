@@ -77,4 +77,11 @@
     <string name="sound_preferences">Sound Preferences</string>
     <string name="pitch_rate">Pitch Rate</string>
     <string name="volume">Volume</string>
+    <string name="light">Light</string>
+    <string name="apply">Apply</string>
+    <string name="dark">Dark</string>
+    <string name="optimal">Optimal</string>
+    <string name="hello_user">Hello User</string>
+
+    <string name="deafult_theme">Deafult Theme</string>
 </resources>

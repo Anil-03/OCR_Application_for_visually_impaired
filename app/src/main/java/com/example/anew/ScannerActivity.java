@@ -2,6 +2,7 @@ package com.example.anew;
 
 import android.content.Intent;
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -48,6 +49,8 @@ public class ScannerActivity extends AppCompatActivity {
     private long lastVolumeUpClickTime = 0;
     private int volumeUpClickCount = 0;
     ImageView captureIV;
+    Boolean speechRecognition,speechOutput;
+    int fontSize;
     TextView resultTV;
     Voice speech;
     String text_result;
@@ -70,6 +73,11 @@ public class ScannerActivity extends AppCompatActivity {
         }else{
             requestPermission();
         }
+        SharedPreferences scannerSetting=getSharedPreferences("settings",MODE_PRIVATE);
+        speechRecognition=scannerSetting.getBoolean("speechRecognitionFlag",true);
+        speechOutput=scannerSetting.getBoolean("speechOutputFlag",true);
+        SharedPreferences scannerPref=getSharedPreferences("preferences",MODE_PRIVATE);
+        fontSize=scannerPref.getInt("textSize",25);
     }
 
     private void showSaveOptions(View view) {
@@ -218,21 +226,23 @@ public class ScannerActivity extends AppCompatActivity {
     }
 
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-            long currentTime = System.currentTimeMillis();
-            // Check if it's a double click within a short duration
-            if (currentTime - lastVolumeUpClickTime < 500) {
-                volumeUpClickCount++;
-                // Perform speech recognition on double click
-                if (volumeUpClickCount == 2) {
-                    startSpeechRecognition();
-                    volumeUpClickCount = 0; // Reset click count
+        if(speechRecognition){
+            if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                long currentTime = System.currentTimeMillis();
+                // Check if it's a double click within a short duration
+                if (currentTime - lastVolumeUpClickTime < 500) {
+                    volumeUpClickCount++;
+                    // Perform speech recognition on double click
+                    if (volumeUpClickCount == 2) {
+                        startSpeechRecognition();
+                        volumeUpClickCount = 0; // Reset click count
+                    }
+                } else {
+                    volumeUpClickCount = 1; // Reset click count if it's a single click
                 }
-            } else {
-                volumeUpClickCount = 1; // Reset click count if it's a single click
+                lastVolumeUpClickTime = currentTime;
+                return true; // Consume the event
             }
-            lastVolumeUpClickTime = currentTime;
-            return true; // Consume the event
         }
         return super.onKeyUp(keyCode, event);
     }
@@ -289,9 +299,11 @@ public class ScannerActivity extends AppCompatActivity {
                 }
             }
         }).addOnFailureListener(e -> speech.speak("Failed to detect text from image"));
-        if(text_result!=null)
-            speech.speak(text_result);
-        else
-            speech.speak("No text detected");
+        if(speechOutput){
+            if(text_result!=null)
+                speech.speak(text_result);
+            else
+                speech.speak("No text detected");
+        }
     }
 }

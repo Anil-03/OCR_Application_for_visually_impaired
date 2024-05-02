@@ -19,6 +19,9 @@
         android:theme="@style/Theme.New"
         tools:targetApi="31">
         <activity
+            android:name=".Login"
+            android:exported="false" />
+        <activity
             android:name=".Preference"
             android:exported="false" />
         <activity

@@ -1,6 +1,7 @@
 package com.example.anew;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
@@ -27,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     private static final int SPEECH_REQUEST_CODE = 1001;
     private boolean welcomeMessageSpoken = false;
 
-
+    Boolean speechRecognition,speechOutput;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         captureImg.setOnClickListener(v -> gotoCapture());
         uploadImg.setOnClickListener(v -> gotoUpload());
         uploadDoc.setOnClickListener(v-> gotoDocumentUpload());
+        SharedPreferences mainPreference=getSharedPreferences("settings",MODE_PRIVATE);
+        speechRecognition=mainPreference.getBoolean("speechRecognitionFlag",true);
+        speechOutput=mainPreference.getBoolean("speechOutputFLag",true);
     }
 
     @Override
@@ -121,21 +125,26 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-            long currentTime = System.currentTimeMillis();
-            // Check if it's a double click within a short duration
-            if (currentTime - lastVolumeUpClickTime < 500) {
-                volumeUpClickCount++;
-                // Perform speech recognition on double click
-                if (volumeUpClickCount == 2) {
-                    startSpeechRecognition();
-                    volumeUpClickCount = 0; // Reset click count
+        if(speechRecognition)
+        {
+            if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                long currentTime = System.currentTimeMillis();
+                // Check if it's a double click within a short duration
+                if (currentTime - lastVolumeUpClickTime < 500) {
+                    volumeUpClickCount++;
+                    // Perform speech recognition on double click
+                    if (volumeUpClickCount == 2) {
+
+                        startSpeechRecognition();
+
+                        volumeUpClickCount = 0; // Reset click count
+                    }
+                } else {
+                    volumeUpClickCount = 1; // Reset click count if it's a single click
                 }
-            } else {
-                volumeUpClickCount = 1; // Reset click count if it's a single click
+                lastVolumeUpClickTime = currentTime;
+                return true; // Consume the event
             }
-            lastVolumeUpClickTime = currentTime;
-            return true; // Consume the event
         }
         return super.onKeyUp(keyCode, event);
     }
@@ -195,7 +204,6 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                     langResult == TextToSpeech.LANG_NOT_SUPPORTED) {
                 Toast.makeText(this, "Language not supported", Toast.LENGTH_SHORT).show();
             } else {
-                // Speak the welcome message only if it hasn't been spoken before
                 float speechRate = 0.7f;
                 textToSpeech.setSpeechRate(speechRate);
                 if (!welcomeMessageSpoken) {

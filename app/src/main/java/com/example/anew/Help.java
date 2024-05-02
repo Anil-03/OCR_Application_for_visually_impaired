@@ -1,20 +1,14 @@
 package com.example.anew;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
-import android.view.GestureDetector;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -23,9 +17,8 @@ public class Help extends AppCompatActivity {
     private static final int SPEECH_REQUEST_CODE = 100;
     private long lastVolumeUpClickTime = 0;
     private int volumeUpClickCount = 0;
-    ArrayList<String> commands=new ArrayList<String>();
+    ArrayList<String> commands= new ArrayList<>();
 
-    String list_of_commands="1.Open Camera 2.Upload Image 3.Upload Document 4.read text again 5.Save as Text Document 6.Save as PDF 7.Go back";
     String oc="Open the device camera to capture an image";
     String ui="Open image picker interface to select an image";
     String ud="Open document picker interface to select a document";
@@ -34,13 +27,14 @@ public class Help extends AppCompatActivity {
     String sp="Save the text as pdf";
     String gb="Go back to home page";
     Voice speech;
+    Boolean speechRecognition,speechOutput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
         speech=new Voice(this);
-        new Handler().postDelayed(()->{speech.speak("Say list of commands to know available commands");},1000);
+        new Handler().postDelayed(()-> speech.speak("Say list of commands to know available commands"),1000);
         commands.add("1.Open Camera");
         commands.add("2.Upload Image");
         commands.add("3.Upload Document");
@@ -48,25 +42,30 @@ public class Help extends AppCompatActivity {
         commands.add("5.Save as Text");
         commands.add("6.Save as PDF");
         commands.add("7.Go back");
+        SharedPreferences helpPref=getSharedPreferences("settings",MODE_PRIVATE);
+        speechRecognition=helpPref.getBoolean("speechRecognitionFlag",true);
+        speechOutput=helpPref.getBoolean("speechOutputFlag",true);
     }
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-            long currentTime = System.currentTimeMillis();
-            // Check if it's a double click within a short duration
-            if (currentTime - lastVolumeUpClickTime < 500) {
-                volumeUpClickCount++;
-                // Perform speech recognition on double click
-                if (volumeUpClickCount == 2) {
-                    startSpeechRecognition();
-                    volumeUpClickCount = 0; // Reset click count
+        if(speechRecognition){
+            if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                long currentTime = System.currentTimeMillis();
+                // Check if it's a double click within a short duration
+                if (currentTime - lastVolumeUpClickTime < 500) {
+                    volumeUpClickCount++;
+                    // Perform speech recognition on double click
+                    if (volumeUpClickCount == 2) {
+                        startSpeechRecognition();
+                        volumeUpClickCount = 0; // Reset click count
+                    }
+                } else {
+                    volumeUpClickCount = 1; // Reset click count if it's a single click
                 }
-            } else {
-                volumeUpClickCount = 1; // Reset click count if it's a single click
+                lastVolumeUpClickTime = currentTime;
+                return true; // Consume the event
             }
-            lastVolumeUpClickTime = currentTime;
-            return true; // Consume the event
         }
         return super.onKeyUp(keyCode, event);
     }
@@ -120,14 +119,12 @@ public class Help extends AppCompatActivity {
             case"list of commands":
                 for (String c:commands) {
                     speech.speak(c);
-                    int i=0;
-                    for(i=0;i<100;i++)
+                    for(int i=0;i<100;i++)
                     {
                         i++;
                     }
                 }
                 break;
-
             default:
                 speech.speak("Command not defined Say list of commands to know about available commands");
                 break;

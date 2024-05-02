@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="OptimalTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">#76D10C</item>
+        <item name="colorPrimaryDark">#86E18A</item>
+        <item name="colorAccent">#CFD877</item>
+        <item name="backgroundColor">#86D189</item>
+        <item name="android:textColor">#D10BF3</item>
+    </style>
+</resources>
