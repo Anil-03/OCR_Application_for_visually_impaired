@@ -2,8 +2,10 @@ package com.example.anew;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.view.GestureDetector;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import androidx.activity.EdgeToEdge;
@@ -19,6 +21,10 @@ import java.util.Locale;
 
 public class Help extends AppCompatActivity {
     private static final int SPEECH_REQUEST_CODE = 100;
+    private long lastVolumeUpClickTime = 0;
+    private int volumeUpClickCount = 0;
+    ArrayList<String> commands=new ArrayList<String>();
+
     String list_of_commands="1.Open Camera 2.Upload Image 3.Upload Document 4.read text again 5.Save as Text Document 6.Save as PDF 7.Go back";
     String oc="Open the device camera to capture an image";
     String ui="Open image picker interface to select an image";
@@ -28,21 +34,41 @@ public class Help extends AppCompatActivity {
     String sp="Save the text as pdf";
     String gb="Go back to home page";
     Voice speech;
-    GestureDetector gestureDetector;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
         speech=new Voice(this);
-        gestureDetector = new GestureDetector(this, new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onDoubleTap(@NonNull MotionEvent e) {
-                // Handle double tap
-                startSpeechRecognition();
-                return super.onDoubleTap(e);
+        new Handler().postDelayed(()->{speech.speak("Say list of commands to know available commands");},1000);
+        commands.add("1.Open Camera");
+        commands.add("2.Upload Image");
+        commands.add("3.Upload Document");
+        commands.add("4.Read Text Again");
+        commands.add("5.Save as Text");
+        commands.add("6.Save as PDF");
+        commands.add("7.Go back");
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+            long currentTime = System.currentTimeMillis();
+            // Check if it's a double click within a short duration
+            if (currentTime - lastVolumeUpClickTime < 500) {
+                volumeUpClickCount++;
+                // Perform speech recognition on double click
+                if (volumeUpClickCount == 2) {
+                    startSpeechRecognition();
+                    volumeUpClickCount = 0; // Reset click count
+                }
+            } else {
+                volumeUpClickCount = 1; // Reset click count if it's a single click
             }
-        });
-        speech.speak("Say list of commands to know available commands");
+            lastVolumeUpClickTime = currentTime;
+            return true; // Consume the event
+        }
+        return super.onKeyUp(keyCode, event);
     }
     private void startSpeechRecognition() {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -92,7 +118,14 @@ public class Help extends AppCompatActivity {
                 speech.speak(gb);
                 break;
             case"list of commands":
-                speech.speak(list_of_commands);
+                for (String c:commands) {
+                    speech.speak(c);
+                    int i=0;
+                    for(i=0;i<100;i++)
+                    {
+                        i++;
+                    }
+                }
                 break;
 
             default:

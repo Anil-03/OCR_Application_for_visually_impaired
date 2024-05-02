@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#8DD0D8"
+    android:orientation="vertical"
+    tools:context=".Settings">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/preferences"
+        android:textSize="30sp"/>
+
+    <LinearLayout
+        android:id="@+id/linear1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_layout"
+        android:backgroundTint="#00BCD4"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/theme"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="20dp"
+            android:background="#00BCD4"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_height="wrap_content"
+            android:background="#FFF"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:layout_marginEnd="60dp"
+
+                android:text="@string/theme" />
+            <Spinner
+                android:id="@+id/theme_spinner"
+                android:background="#CAC2C2"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linear2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_layout"
+        android:backgroundTint="#00BCD4"
+        android:layout_marginVertical="10dp"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="20dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/style"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="20dp"
+            android:background="#00BCD4"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_height="wrap_content"
+            android:background="#FFF"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="@string/text_size"
+                android:layout_marginEnd="70dp"
+                android:layout_height="wrap_content"
+                />
+            <SeekBar
+                android:id="@+id/text_size"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="30"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:background="#FFF"
+            android:orientation="horizontal">
+
+
+
+
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linear3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_layout"
+        android:backgroundTint="#00BCD4"
+        android:layout_marginVertical="10dp"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="20dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sound_preferences"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="20dp"
+            android:background="#00BCD4"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_height="wrap_content"
+            android:background="#FFF"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="60dp"
+                android:text="@string/pitch_rate"/>
+            <SeekBar
+                android:id="@+id/pitch_rate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
+            android:background="#FFF"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/volume"
+                android:layout_marginEnd="75dp"
+                />
+            <SeekBar
+                android:id="@+id/volume"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:max="100"/>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -70,10 +70,13 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     }
 
     private void gotoSettings() {
+        Intent settings=new Intent(MainActivity.this, Settings.class);
+        startActivity(settings);
     }
 
     private void gotoPreferences() {
-
+        Intent pref=new Intent(MainActivity.this, Preference.class);
+        startActivity(pref);
     }
 
     private void gotoHelp() {
@@ -167,6 +170,14 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
             case"help":
                 speak("Opening Help");
                 gotoHelp();
+                break;
+            case"preferences":
+                speak("Going to Preferences");
+                gotoPreferences();
+                break;
+            case "settings":
+                speak("Going to Settings");
+                gotoSettings();
                 break;
             case"how to use app":
                 speak("You can use voice commands to navigate through the app Just say help to know about available commands");

@@ -59,4 +59,22 @@
     <string name="upload_document">Upload Document</string>
     <string name="list_of_commands">List of Commands: \n\n1.Open Camera\n2.Upload Image\n3.Upload Document\n4.read text again\n5.Save as Text\n6.Save as PDF\n7.Go back</string>
     <string name="description_of_commands">Open Camera:-Open the camera to capture an image\n\nUpload Image:-Open the image picker interface to pick an image from device storage\n\nUpload Document:-Opens the document picker interface to select a document to upload\n\nRead Text Again:-Read the text again\n\nSave as Text Document:-Save the text as document\n\nSave as PDF:-Save the text as PDF\n\nGo back:-Go back to home page</string>
+    <string name="text_recognition">Text Recognition</string>
+    <string name="text_recognition_engine">Text Recognition Engine</string>
+    <string name="speech_recognition_voice_commands">Speech Recognition / Voice Commands</string>
+    <string name="speech_output">Speech Output</string>
+    <string name="speech_recognition_voice_command">Speech Recognition/Voice Command</string>
+    <string name="speech_recognition">Speech Recognition</string>
+    <string name="about_us">About Us</string>
+    <string name="log_out">Log Out</string>
+    <string name="feedback">Feedback</string>
+    <string name="support_guidance">Support / Guidance</string>
+    <string name="text_recognition_language">Text Recognition Language</string>
+    <string name="theme">Theme</string>
+    <string name="Theme">\nTheme</string>
+    <string name="style">Style</string>
+    <string name="text_size">Text Size</string>
+    <string name="sound_preferences">Sound Preferences</string>
+    <string name="pitch_rate">Pitch Rate</string>
+    <string name="volume">Volume</string>
 </resources>
