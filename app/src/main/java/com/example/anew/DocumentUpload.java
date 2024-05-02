@@ -1,26 +1,21 @@
 package com.example.anew;
-
-
-
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.pdf.PdfDocument;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.Scanner;
 
 public class DocumentUpload extends AppCompatActivity {
@@ -29,7 +24,8 @@ public class DocumentUpload extends AppCompatActivity {
     Voice speech;
     Button save;
     TextView result;
-    private int CREATE_DOCUMENT_REQUEST_CODE=1;
+    private final int CREATE_DOCUMENT_REQUEST_CODE=1;
+    int font_size;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +46,6 @@ public class DocumentUpload extends AppCompatActivity {
             {
                 saveToDoc(result.getText().toString());
 
-            } else if (item.getItemId()==R.id.savePDF) {
-                saveAsPDF(result.getText().toString());
             }
 
             return false;
@@ -76,18 +70,19 @@ public class DocumentUpload extends AppCompatActivity {
                     if(mimeType!=null && mimeType.startsWith("text")){
                         readTextFromDocument(selectedDocUri);
                     }
-                    else {
-                        performImageRecognition(selectedDocUri);
-                    }
+
                 }
             }
         }
+        if (requestCode == CREATE_DOCUMENT_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data != null && data.getData() != null) {
+                Uri uri = data.getData();
+                TextView resultTV=findViewById(R.id.uploadTV);
+                writeTextToFile(uri,resultTV.getText().toString());
+            }
+        }
+
     }
-
-    private void performImageRecognition(Uri selectedDocUri) {
-
-    }
-
     private void readTextFromDocument(Uri selectedDocUri) {
         try {
             InputStream inputStream = getContentResolver().openInputStream(selectedDocUri);
@@ -112,36 +107,22 @@ public class DocumentUpload extends AppCompatActivity {
         speech.speak(documentContent);
     }
 
-    private void saveAsPDF(String string) {
 
-            String extStorageDir = Environment.getExternalStorageDirectory().toString();
-            File fol = new File(extStorageDir, "pdf");
-            File folder=new File(fol,"pdf");
-            if(!folder.exists()) {
-                boolean bool = folder.mkdir();
+    private void writeTextToFile(Uri uri, String text) {
+        try {
+            OutputStream outputStream = getContentResolver().openOutputStream(uri);
+            if (outputStream != null) {
+                OutputStreamWriter writer = new OutputStreamWriter(outputStream);
+                writer.write(text);
+                writer.close();
+                outputStream.close();
+                Toast.makeText(this, "Text saved to document", Toast.LENGTH_SHORT).show();
             }
-            try {
-                final File file = new File(folder, "sample.pdf");
-                boolean newFile = file.createNewFile();
-                FileOutputStream fOut = new FileOutputStream(file);
-
-                PdfDocument document = new PdfDocument();
-                PdfDocument.PageInfo pageInfo = new
-                        PdfDocument.PageInfo.Builder(100, 100, 1).create();
-                PdfDocument.Page page = document.startPage(pageInfo);
-                Canvas canvas = page.getCanvas();
-                Paint paint = new Paint();
-
-                canvas.drawText(string, 10, 10, paint);
-                document.finishPage(page);
-                document.writeTo(fOut);
-                document.close();
-
-            }catch (IOException e){
-                speech.speak("Error saving document");
-            }
+        } catch (IOException e) {
+            //e.printStackTrace();
+            Toast.makeText(this, "Error saving text to document", Toast.LENGTH_SHORT).show();
+        }
     }
-
     private void saveToDoc(String string) {
         try {
             Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);

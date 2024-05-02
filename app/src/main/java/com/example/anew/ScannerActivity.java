@@ -88,10 +88,7 @@ public class ScannerActivity extends AppCompatActivity {
             {
                 saveToText();
 
-            } else if (item.getItemId()==R.id.savePDF) {
-                saveToPDF();
             }
-
             return false;
         });
         popupMenu.show();
@@ -138,48 +135,12 @@ public class ScannerActivity extends AppCompatActivity {
                 speech.speak("Saving as Text Document");
                 saveToText();
                 break;
-            case"save as pdf":
-                speech.speak("Saving as PDF");
-                saveToPDF();
-                break;
             default:
                 speech.speak("Command not recognized");
                 break;
         }
     }
 
-    private void saveToPDF() {
-        String extstoragedir = Environment.getExternalStorageDirectory().toString();
-        File fol = new File(extstoragedir, "pdf");
-        File folder=new File(fol,"pdf");
-        if(!folder.exists()) {
-            boolean bool = folder.mkdir();
-        }
-        try {
-            final File file = new File(folder, "ocr_result.pdf");
-            boolean newFile = file.createNewFile();
-            FileOutputStream fOut = new FileOutputStream(file);
-
-
-            PdfDocument document = new PdfDocument();
-            PdfDocument.PageInfo pageInfo = new
-                    PdfDocument.PageInfo.Builder(100, 100, 1).create();
-            PdfDocument.Page page = document.startPage(pageInfo);
-            Canvas canvas = page.getCanvas();
-            Paint paint = new Paint();
-
-            canvas.drawText(resultTV.getText().toString(), 10, 10, paint);
-
-
-
-            document.finishPage(page);
-            document.writeTo(fOut);
-            document.close();
-
-        }catch (IOException e){
-            Log.i("error", Objects.requireNonNull(e.getLocalizedMessage()));
-        }
-    }
 
     private void saveToText() {
         try {

@@ -19,7 +19,6 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.Task;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -27,6 +26,8 @@ import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -40,7 +41,6 @@ public class Upload extends AppCompatActivity {
 
     private int volumeUpClickCount = 0;
     Voice speech;
-    String OCR_Result;
     TextView resultTextView;
     int font_size;
     private static final int PICK_IMAGE_REQUEST = 2;
@@ -53,12 +53,13 @@ public class Upload extends AppCompatActivity {
         save = findViewById(R.id.uploadDetectBtn);
         save.setOnClickListener(this::showSaveOptions);
         resultTextView = findViewById(R.id.uploadTV);
-        openFilePicker();
+
         SharedPreferences uploadPref=getSharedPreferences("preferences",MODE_PRIVATE);
         font_size=uploadPref.getInt("textSize",25);
         speechRecognition=uploadPref.getBoolean("speechRecognitionFlag",true);
         speechOutput=uploadPref.getBoolean("speechOutputFlag",true);
-        resultTextView.setTextSize(font_size);
+        //resultTextView.setTextSize(font_size);
+        openFilePicker();
     }
 
     @Override
@@ -91,21 +92,14 @@ public class Upload extends AppCompatActivity {
         popupMenu.setOnMenuItemClickListener(item -> {
             if(item.getItemId()==R.id.saveText)
             {
-                saveToDoc(resultTextView.getText().toString());
-
-            } else if (item.getItemId()==R.id.savePDF) {
-                saveAsPDF(resultTextView.getText().toString());
+                saveToDoc();
             }
-
             return false;
         });
         popupMenu.show();
     }
 
-    private void saveAsPDF(String string) {
-    }
-
-    private void saveToDoc(String string) {
+    private void saveToDoc() {
 
         try {
             Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
@@ -147,6 +141,29 @@ public class Upload extends AppCompatActivity {
                     handleVoiceCommand(result.get(0));
                 }
             }
+        }
+        if (requestCode == CREATE_DOCUMENT_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data != null && data.getData() != null) {
+                Uri uri = data.getData();
+                TextView resultTV=findViewById(R.id.uploadTV);
+                writeTextToFile(uri,resultTV.getText().toString());
+            }
+        }
+    }
+
+    private void writeTextToFile(Uri uri, String text) {
+        try {
+            OutputStream outputStream = getContentResolver().openOutputStream(uri);
+            if (outputStream != null) {
+                OutputStreamWriter writer = new OutputStreamWriter(outputStream);
+                writer.write(text);
+                writer.close();
+                outputStream.close();
+                Toast.makeText(this, "Text saved to document", Toast.LENGTH_SHORT).show();
+            }
+        } catch (IOException e) {
+            //e.printStackTrace();
+            Toast.makeText(this, "Error saving text to document", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -200,24 +217,19 @@ public class Upload extends AppCompatActivity {
         InputImage image = InputImage.fromBitmap(imageBitmap, 0);
         TextRecognizer recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
 
-        Task<Text> result = recognizer.process(image)
+        recognizer.process(image)
                 .addOnSuccessListener(text -> {
                     StringBuilder resultText = new StringBuilder();
                     for (Text.TextBlock block : text.getTextBlocks()) {
                         String blockText = block.getText();
                         resultText.append(blockText).append("\n");
                     }
-
                     // Display the recognized text in your TextView
-
                     resultTextView.setText(resultText.toString());
-                    if(speechOutput)
-                        speech.speak(resultText.toString());
-
+                    speech.speak(resultTextView.getText().toString());
                 })
-                .addOnFailureListener(e -> Toast.makeText(this, "Failed to detect text from image", Toast.LENGTH_SHORT).show());
-        OCR_Result = resultTextView.getText().toString();
-
+                .addOnFailureListener(e -> {Toast.makeText(this, "Failed to detect text from image", Toast.LENGTH_SHORT).show();
+                speech.speak("Failed to detect text from image");});
     }
 
     @Override

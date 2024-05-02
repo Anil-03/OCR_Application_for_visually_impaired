@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     android:background="#FFF"
     tools:context=".MainActivity">
+    <TextView
+        android:id="@+id/loginRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/black"
+        android:layout_marginTop="70dp"
+        android:text="@string/login_register"
+        android:textSize="18sp"
+        android:layout_alignParentTop="true"/>
     <Button
         android:id="@+id/captureImg"
         android:layout_width="match_parent"

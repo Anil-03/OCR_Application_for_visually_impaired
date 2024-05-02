@@ -14,6 +14,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 
 public class Settings extends AppCompatActivity {
@@ -26,6 +28,7 @@ public class Settings extends AppCompatActivity {
     Boolean speechOutput=true;
     String engine="Firebase";
     String language="English";
+    private FirebaseAuth auth;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch speech_recognition;
     @SuppressLint("UseSwitchCompatOrMaterialCode")
@@ -37,6 +40,7 @@ public class Settings extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         speech = new Voice(this);
         help=findViewById(R.id.help);
+        auth=FirebaseAuth.getInstance();
         feedback=findViewById(R.id.feedback);
         logout=findViewById(R.id.logout);
         saveSettings=findViewById(R.id.saveSettings);
@@ -118,7 +122,7 @@ public class Settings extends AppCompatActivity {
 
         });
         logout.setOnClickListener(v->{
-
+            auth.signOut();
         });
 
         saveSettings.setOnClickListener(v-> {

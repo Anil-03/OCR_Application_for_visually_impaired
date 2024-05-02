@@ -24,7 +24,6 @@ public class Help extends AppCompatActivity {
     String ud="Open document picker interface to select a document";
     String ra="Read the text again";
     String st="Save the text as text document";
-    String sp="Save the text as pdf";
     String gb="Go back to home page";
     Voice speech;
     Boolean speechRecognition,speechOutput;
@@ -40,7 +39,6 @@ public class Help extends AppCompatActivity {
         commands.add("3.Upload Document");
         commands.add("4.Read Text Again");
         commands.add("5.Save as Text");
-        commands.add("6.Save as PDF");
         commands.add("7.Go back");
         SharedPreferences helpPref=getSharedPreferences("settings",MODE_PRIVATE);
         speechRecognition=helpPref.getBoolean("speechRecognitionFlag",true);
@@ -109,9 +107,6 @@ public class Help extends AppCompatActivity {
                 break;
             case"save as text document":
                 speech.speak(st);
-                break;
-            case"save as pdf":
-                speech.speak(sp);
                 break;
             case"go back":
                 speech.speak(gb);

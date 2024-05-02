@@ -10,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     Button captureImg,uploadImg,uploadDoc;
     private TextToSpeech textToSpeech;
     private long lastVolumeUpClickTime = 0;
+    TextView login_register;
     private int volumeUpClickCount = 0;
     private static final int SPEECH_REQUEST_CODE = 1001;
     private boolean welcomeMessageSpoken = false;
@@ -36,16 +38,17 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
         Toolbar toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         textToSpeech = new TextToSpeech(this, this);
-        speak("Welcome to OCR Application");
         captureImg = findViewById(R.id.captureImg);
         uploadImg = findViewById(R.id.uploadImg);
         uploadDoc=findViewById(R.id.uploadDoc);
         captureImg.setOnClickListener(v -> gotoCapture());
         uploadImg.setOnClickListener(v -> gotoUpload());
+        login_register=findViewById(R.id.loginRegister);
         uploadDoc.setOnClickListener(v-> gotoDocumentUpload());
         SharedPreferences mainPreference=getSharedPreferences("settings",MODE_PRIVATE);
         speechRecognition=mainPreference.getBoolean("speechRecognitionFlag",true);
         speechOutput=mainPreference.getBoolean("speechOutputFLag",true);
+        login_register.setOnClickListener(v-> startActivity(new Intent(MainActivity.this, Login.class)));
     }
 
     @Override
