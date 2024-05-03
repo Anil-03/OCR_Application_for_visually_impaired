@@ -8,9 +8,9 @@
     tools:context=".Upload">
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="200dp"
-        android:minWidth="200dp"
+        android:layout_height="150dp"
+        android:minHeight="150dp"
+        android:minWidth="150dp"
         android:layout_alignParentTop="true"
         android:id="@+id/uploadIV"
         android:layout_marginStart="20dp"
@@ -48,10 +48,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
+        android:layout_above="@id/uploadCloud"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="@string/save"/>
+    <Button
+        android:id="@+id/uploadCloud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        android:text="@string/save"
+        android:text="@string/save_online"
         />
 
 </RelativeLayout>

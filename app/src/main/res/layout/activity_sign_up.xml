@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:background="@drawable/world"
+    android:background="@drawable/nature_back"
     android:gravity="center"
     tools:context=".SignUp"
     android:orientation="vertical">
@@ -34,11 +34,26 @@
                 android:textStyle="bold"
                 android:textColor="@color/lavender"/>
             <EditText
-                android:id="@+id/signupEmail"
+                android:id="@+id/signupUsername"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/custom_edittext"
                 android:layout_marginTop="40dp"
+                android:padding="8dp"
+                android:hint="@string/user_name"
+                android:drawablePadding="8dp"
+                android:drawableStart="@drawable/baseline_group_24"
+
+                android:textColor="@color/black"
+                android:inputType="textEmailAddress"
+                android:autofillHints="emailAddress" />
+
+            <EditText
+                android:id="@+id/signupEmail"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/custom_edittext"
+                android:layout_marginTop="20dp"
                 android:padding="8dp"
                 android:hint="@string/email"
                 android:drawablePadding="8dp"

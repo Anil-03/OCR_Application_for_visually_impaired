@@ -22,6 +22,9 @@ public class DocumentUpload extends AppCompatActivity {
 
     private static final int PICK_DOCUMENT_REQ_CODE = 100;
     Voice speech;
+
+    Boolean speechRecognition=true;
+    Boolean speechOutput=true;
     Button save;
     TextView result;
     private final int CREATE_DOCUMENT_REQUEST_CODE=1;
@@ -34,23 +37,13 @@ public class DocumentUpload extends AppCompatActivity {
         speech=new Voice(this);
         save=findViewById(R.id.btnSaveDoc);
         result=findViewById(R.id.txtResultDoc);
-        save.setOnClickListener(this::showSaveOptions);
+        save.setOnClickListener(v->saveToDoc());
+        SharedPreferences uploadPref=getSharedPreferences("preferences",MODE_PRIVATE);
+        font_size=uploadPref.getInt("textSize",25);
+        speechRecognition=uploadPref.getBoolean("speechRecognitionFlag",true);
+        speechOutput=uploadPref.getBoolean("speechOutputFlag",true);
+        result.setTextSize(font_size);
         getDocument();
-    }
-
-    private void showSaveOptions(View view) {
-        PopupMenu popupMenu = new PopupMenu(this, view);
-        popupMenu.getMenuInflater().inflate(R.menu.save_menu, popupMenu.getMenu());
-        popupMenu.setOnMenuItemClickListener(item -> {
-            if(item.getItemId()==R.id.saveText)
-            {
-                saveToDoc(result.getText().toString());
-
-            }
-
-            return false;
-        });
-        popupMenu.show();
     }
 
     private void getDocument() {
@@ -104,7 +97,8 @@ public class DocumentUpload extends AppCompatActivity {
 
     private void handleRecognizedText(String documentContent) {
         result.setText(documentContent);
-        speech.speak(documentContent);
+        if(speechOutput)
+            speech.speak(documentContent);
     }
 
 
@@ -123,7 +117,7 @@ public class DocumentUpload extends AppCompatActivity {
             Toast.makeText(this, "Error saving text to document", Toast.LENGTH_SHORT).show();
         }
     }
-    private void saveToDoc(String string) {
+    private void saveToDoc() {
         try {
             Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);

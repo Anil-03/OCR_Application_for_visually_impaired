@@ -1,26 +1,24 @@
 package com.example.anew;
 
-import android.content.Intent;
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,18 +27,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Objects;
 
 public class ScannerActivity extends AppCompatActivity {
 
@@ -48,13 +45,15 @@ public class ScannerActivity extends AppCompatActivity {
     private static final int CREATE_DOCUMENT_REQUEST_CODE = 101;
     private long lastVolumeUpClickTime = 0;
     private int volumeUpClickCount = 0;
+    Boolean login;
     ImageView captureIV;
     Boolean speechRecognition,speechOutput;
     int fontSize;
     TextView resultTV;
     Voice speech;
     String text_result;
-    Button saveBtn;
+    Button saveBtn,uploadCloud;
+    String currentDateTime="Apr 3 2024";
     Bitmap imageBitmap;
     static final int REQUEST_IMAGE_CAPTURE=1;
     private static final int PERMISSION_CODE = 200;
@@ -67,7 +66,9 @@ public class ScannerActivity extends AppCompatActivity {
         captureIV=findViewById(R.id.newImgview);
         resultTV=findViewById(R.id.newTxtview);
         saveBtn=findViewById(R.id.btnDetect);
-        saveBtn.setOnClickListener(this::showSaveOptions);
+        uploadCloud=findViewById(R.id.uploadCloud);
+        saveBtn.setOnClickListener(v->saveToText());
+        uploadCloud.setOnClickListener(v->checkCredentialAndUpload());
         if(checkPermission()){
             captureImage();
         }else{
@@ -78,6 +79,19 @@ public class ScannerActivity extends AppCompatActivity {
         speechOutput=scannerSetting.getBoolean("speechOutputFlag",true);
         SharedPreferences scannerPref=getSharedPreferences("preferences",MODE_PRIVATE);
         fontSize=scannerPref.getInt("textSize",25);
+        resultTV.setTextSize(fontSize);
+
+    }
+
+    private void checkCredentialAndUpload() {
+        SharedPreferences loginPRef=getSharedPreferences("login",MODE_PRIVATE);
+        login=loginPRef.getBoolean("loginState",false);
+        if(!login){
+            startActivity(new Intent(ScannerActivity.this,Login.class));
+        }
+        else{
+            saveData();
+        }
     }
 
     private void showSaveOptions(View view) {
@@ -86,8 +100,7 @@ public class ScannerActivity extends AppCompatActivity {
         popupMenu.setOnMenuItemClickListener(item -> {
             if(item.getItemId()==R.id.saveText)
             {
-                saveToText();
-
+                saveData();
             }
             return false;
         });
@@ -141,6 +154,39 @@ public class ScannerActivity extends AppCompatActivity {
         }
     }
 
+    private void saveData(){
+
+        StorageReference storageReference= FirebaseStorage.getInstance().getReference().child("Document");
+        AlertDialog.Builder builder=new AlertDialog.Builder(ScannerActivity.this);
+        builder.setCancelable(false);
+        builder.setView(R.layout.progress_layout);
+        AlertDialog dialog=builder.create();
+        dialog.show();
+
+        storageReference.putBytes(resultTV.getText().toString().getBytes()).addOnSuccessListener(taskSnapshot -> {
+            Task<Uri> uriTask=taskSnapshot.getStorage().getDownloadUrl();
+            while(!uriTask.isComplete());
+            Uri urlDocument=uriTask.getResult();
+            uploadData();
+            dialog.dismiss();
+        }).addOnFailureListener(e -> dialog.dismiss());
+    }
+
+    private void uploadData() {
+        String document_name="document";
+        String date_time=currentDateTime;
+        String data=resultTV.getText().toString();
+        String user="prajapatianil2003@gmail.com";
+
+        Data dataClass=new Data(document_name,date_time,data,user);
+
+        FirebaseDatabase.getInstance().getReference("Scanned_Document").child(document_name).setValue(dataClass).addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                Toast.makeText(ScannerActivity.this,"Saved",Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }).addOnFailureListener(e -> Toast.makeText(ScannerActivity.this,e.getMessage(),Toast.LENGTH_LONG).show());
+    }
 
     private void saveToText() {
         try {
@@ -232,9 +278,6 @@ public class ScannerActivity extends AppCompatActivity {
                     handleVoiceCommand(result.get(0));
                 }
             }
-        }
-        else{
-            speech.speak("Unable to recognize command");
         }
     }
 

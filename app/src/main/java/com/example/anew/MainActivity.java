@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
     Button captureImg,uploadImg,uploadDoc;
     private TextToSpeech textToSpeech;
     private long lastVolumeUpClickTime = 0;
+    String welcome_message="Welcome to OCR Application, Speak the command to perform action Double tap on the volume up button to start speech recognition and speak help to know about available commands";
     TextView login_register;
     private int volumeUpClickCount = 0;
     private static final int SPEECH_REQUEST_CODE = 1001;
@@ -210,7 +211,8 @@ public class MainActivity extends AppCompatActivity implements TextToSpeech.OnIn
                 float speechRate = 0.7f;
                 textToSpeech.setSpeechRate(speechRate);
                 if (!welcomeMessageSpoken) {
-                    speak("Welcome to OCR Application, Speak the command to perform action Double tap on the volume up button to start speech recognition and speak help to know about available commands");
+                    speak(welcome_message);
+                    welcome_message="";
                     welcomeMessageSpoken = true;
                 }
             }

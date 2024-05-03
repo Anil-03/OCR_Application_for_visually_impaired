@@ -1,5 +1,6 @@
 package com.example.anew;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -19,6 +20,10 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -34,7 +39,7 @@ import java.util.Locale;
 public class Upload extends AppCompatActivity {
     private static final int SPEECH_REQUEST_CODE =100 ;
     private static final int CREATE_DOCUMENT_REQUEST_CODE = 1;
-    Button save;
+    Button save,uploadCloud;
     private long lastVolumeUpClickTime = 0;
     Boolean speechRecognition=true;
     Boolean speechOutput=true;
@@ -43,6 +48,9 @@ public class Upload extends AppCompatActivity {
     Voice speech;
     TextView resultTextView;
     int font_size;
+    String user="user";
+    Boolean login;
+    String user_data;
     private static final int PICK_IMAGE_REQUEST = 2;
 
     @Override
@@ -51,14 +59,17 @@ public class Upload extends AppCompatActivity {
         setContentView(R.layout.activity_upload);
         speech = new Voice(this);
         save = findViewById(R.id.uploadDetectBtn);
-        save.setOnClickListener(this::showSaveOptions);
+        save.setOnClickListener(v->saveToDoc());
         resultTextView = findViewById(R.id.uploadTV);
-
+        uploadCloud=findViewById(R.id.uploadCloud);
+        uploadCloud.setOnClickListener(v->checkCredentialAndUpload());
         SharedPreferences uploadPref=getSharedPreferences("preferences",MODE_PRIVATE);
         font_size=uploadPref.getInt("textSize",25);
         speechRecognition=uploadPref.getBoolean("speechRecognitionFlag",true);
         speechOutput=uploadPref.getBoolean("speechOutputFlag",true);
-        //resultTextView.setTextSize(font_size);
+        resultTextView.setTextSize(font_size);
+        SharedPreferences loginPref=getSharedPreferences("login",MODE_PRIVATE);
+        user_data=loginPref.getString("username",user);
         openFilePicker();
     }
 
@@ -86,13 +97,24 @@ public class Upload extends AppCompatActivity {
     }
 
 
+    private void checkCredentialAndUpload() {
+        SharedPreferences loginPRef=getSharedPreferences("login",MODE_PRIVATE);
+        login=loginPRef.getBoolean("loginState",false);
+        if(login){
+            saveData();
+        }
+        else{
+            startActivity(new Intent(Upload.this,Login.class));
+        }
+    }
+
     private void showSaveOptions(View view) {
         PopupMenu popupMenu = new PopupMenu(this, view);
         popupMenu.getMenuInflater().inflate(R.menu.save_menu, popupMenu.getMenu());
         popupMenu.setOnMenuItemClickListener(item -> {
             if(item.getItemId()==R.id.saveText)
             {
-                saveToDoc();
+                saveData();
             }
             return false;
         });
@@ -114,6 +136,40 @@ public class Upload extends AppCompatActivity {
             speech.speak("Error saving document");
             speech.speak(errorMsg);
         }
+    }
+
+
+    private void saveData(){
+        StorageReference storageReference= FirebaseStorage.getInstance().getReference().child("Document");
+        AlertDialog.Builder builder=new AlertDialog.Builder(Upload.this);
+        builder.setCancelable(false);
+        builder.setView(R.layout.progress_layout);
+        AlertDialog dialog=builder.create();
+        dialog.show();
+
+        storageReference.putBytes(resultTextView.getText().toString().getBytes()).addOnSuccessListener(taskSnapshot -> {
+            Task<Uri> uriTask=taskSnapshot.getStorage().getDownloadUrl();
+            while(!uriTask.isComplete());
+            Uri urlDocument=uriTask.getResult();
+            uploadData();
+            dialog.dismiss();
+        }).addOnFailureListener(e -> dialog.dismiss());
+    }
+
+    private void uploadData() {
+        String document_name="upload_document";
+        String currentDateTime="Apr 3 2023";
+        String data=resultTextView.getText().toString();
+
+
+        Data dataClass=new Data(document_name, currentDateTime,data,user_data);
+
+        FirebaseDatabase.getInstance().getReference("Upload_Document").child(document_name).setValue(dataClass).addOnCompleteListener(task -> {
+            if(task.isSuccessful()){
+                Toast.makeText(Upload.this,"Saved",Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }).addOnFailureListener(e -> Toast.makeText(Upload.this,"Uploaded Successfully",Toast.LENGTH_LONG).show());
     }
 
     private void openFilePicker() {

@@ -41,14 +41,18 @@ public class Settings extends AppCompatActivity {
         speech = new Voice(this);
         help=findViewById(R.id.help);
         auth=FirebaseAuth.getInstance();
-        feedback=findViewById(R.id.feedback);
-        logout=findViewById(R.id.logout);
+
         saveSettings=findViewById(R.id.saveSettings);
         eng_spinner = findViewById(R.id.engine_spinner);
         lang_spinner = findViewById(R.id.language_spinner);
         speech_recognition = findViewById(R.id.speech_recognition);
         speech_output = findViewById(R.id.speechOutput);
 
+        ArrayList<String> engineList = new ArrayList<>();
+        engineList.add("Firebase ML Kit");
+        ArrayAdapter<String> eng_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, engineList);
+        eng_adapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+        eng_spinner.setAdapter(eng_adapter);
         eng_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
@@ -62,11 +66,13 @@ public class Settings extends AppCompatActivity {
 
             }
         });
-        ArrayList<String> engineList = new ArrayList<>();
-        engineList.add("Firebase ML Kit");
-        ArrayAdapter<String> eng_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, engineList);
-        eng_adapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
-        eng_spinner.setAdapter(eng_adapter);
+
+
+        ArrayList<String> languageList = new ArrayList<>();
+        languageList.add("English");
+        ArrayAdapter<String> lang_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, languageList);
+        lang_adapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
+        lang_spinner.setAdapter(lang_adapter);
 
         lang_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -81,20 +87,14 @@ public class Settings extends AppCompatActivity {
 
             }
         });
-        ArrayList<String> languageList = new ArrayList<>();
-        languageList.add("English");
-        ArrayAdapter<String> lang_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, languageList);
-        lang_adapter.setDropDownViewResource(android.R.layout.select_dialog_singlechoice);
-        lang_spinner.setAdapter(eng_adapter);
+
 
         speech_recognition.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(speech_recognition.isChecked()){
-                speech.speak("Speech Recognition is On");
+                speech.speak("Speech Recognition Enabled");
                 speechRecognition=true;
-            }
-
-            if(!speech_recognition.isChecked()){
-                speech.speak("Speech Recognition is Off");
+            }else{
+                speech.speak("Speech Recognition Disabled");
                 speechRecognition=false;
             }
 
@@ -103,26 +103,17 @@ public class Settings extends AppCompatActivity {
         speech_output.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(speech_output.isChecked())
             {
-                speech.speak("Speech Output On");
+                speech.speak("Speech Output Enabled");
                 speechOutput=true;
-            }
-
-            if(!speech_output.isChecked()){
-                speech.speak("Speech Output is Off");
+            }else{
+                speech.speak("Speech Output is Disabled");
                 speechOutput=false;
             }
 
         });
-
         help.setOnClickListener(v -> {
             Intent help=new Intent(Settings.this, Help.class);
             startActivity(help);
-        });
-        feedback.setOnClickListener(v->{
-
-        });
-        logout.setOnClickListener(v->{
-            auth.signOut();
         });
 
         saveSettings.setOnClickListener(v-> {

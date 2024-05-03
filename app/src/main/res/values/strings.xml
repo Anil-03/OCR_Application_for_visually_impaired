@@ -91,4 +91,9 @@
     <string name="login">Login</string>
     <string name="not_yet_registered_sign_up">Not yet Registered? Sign up</string>
     <string name="login_register">LogIn/Register</string>
+    <string name="saving">Saving...</string>
+    <string name="upload_to_cloud">Upload to Cloud</string>
+    <string name="welcome">Welcome</string>
+    <string name="save_online">Save Online</string>
+    <string name="user_name">User Name</string>
 </resources>

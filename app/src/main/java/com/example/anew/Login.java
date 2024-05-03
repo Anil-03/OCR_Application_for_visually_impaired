@@ -1,6 +1,7 @@
 package com.example.anew;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.widget.Button;
@@ -29,6 +30,7 @@ public class Login extends AppCompatActivity {
         TextView signupRedirectText = findViewById(R.id.signupRedirectText);
         Button loginButton = findViewById(R.id.btnLogin);
 
+        signupRedirectText.setOnClickListener(v->startActivity(new Intent(Login.this,SignUp.class)));
         loginButton.setOnClickListener(v->{
             String email=loginEmail.getText().toString();
             String pass=loginPassword.getText().toString();
@@ -37,6 +39,13 @@ public class Login extends AppCompatActivity {
                     auth.signInWithEmailAndPassword(email,pass).addOnSuccessListener(authResult -> {
                         Toast.makeText(Login.this,"Login Successful",Toast.LENGTH_LONG).show();
                         speech.speak("Login Successful");
+
+                            SharedPreferences loginPref=getSharedPreferences("login",MODE_PRIVATE);
+                            SharedPreferences.Editor editor=loginPref.edit();
+                            editor.putBoolean("loginState",true);
+                            editor.apply();
+                            startActivity(new Intent(Login.this,SignUp.class));
+
                         startActivity(new Intent(Login.this,MainActivity.class));
                         finish();
                     }).addOnFailureListener(e -> {
@@ -55,6 +64,6 @@ public class Login extends AppCompatActivity {
                 loginEmail.setError("Please enter valid email/password");
             }
         });
-        signupRedirectText.setOnClickListener(v -> startActivity(new Intent(Login.this,SignUp.class)));
+
     }
 }
